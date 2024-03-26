@@ -1,6 +1,7 @@
 pipeline {
     parameters {
         choice(name: 'REPOSITORY', choices: ['https://github.com/Daendr/Userinterface.git'], description: 'Выберите репозиторий для сборки')
+        booleanParam(name: 'VERBOSE', defaultValue: false, description: 'Enable verbose mode')
     }
     agent any
 
@@ -50,14 +51,24 @@ pipeline {
             }
         }
         stage('Run Tests') {
-            steps {
-                script {
-                    // Запуск тестов
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest tests'
-                }
-            }
+        when {
+            expression { params.VERBOSE }
+        }
+        steps {
+            // Запуск тестов в режиме verbose
+            bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest --verbose tests'
+        }
         }
 
+        stage('Run Tests Quietly') {
+            when {
+                expression { !params.VERBOSE }
+            }
+            steps {
+                // Запуск тестов в тихом режиме
+                bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest --quiet tests'
+            }
+        }
         stage('Run HTML Report') {
             steps {
                 script {
