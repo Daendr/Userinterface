@@ -2,6 +2,7 @@ pipeline {
     parameters {
         choice(name: 'REPOSITORY', choices: ['https://github.com/Daendr/Userinterface.git'], description: 'Выберите репозиторий для сборки')
         booleanParam(name: 'VERBOSE', defaultValue: false, description: 'Enable verbose mode')
+        choice(name: 'TRIGGER_TYPE', choices: ['Manual', 'VCS Change', 'Trigger from Another Job', 'API Request'], description: 'Select the trigger type')
     }
     agent any
 
