@@ -9,13 +9,20 @@ pipeline {
     triggers {
         cron('H 8 * * *') // Запланированная сборка каждый день в 8 часов
         pollSCM('H/5 * * * *') // Проверять изменения каждые 5 минут
+        GenericTrigger(
+            genericVariables: [
+                [key: 'TRIGGER_TYPE', value: '$.trigger_type']
+                // Добавьте дополнительные переменные, если необходимо
+            ],
+            regexpFilterText: '',
+            regexpFilterExpression: '',
+            token: 'my-token' // Уникальный токен для безопасной идентификации запросов
+        )
     }
 
     environment {
         // Устанавливаем кодировку для вывода Python в UTF-8
         PYTHONIOENCODING = 'UTF-8'
-        // Добавляем путь к Python в переменную PATH
-        PATH = "C:\\Users\\AU\\AppData\\Local\\Programs\\Python\\Python39\\:$PATH"
     }
 
     options {
@@ -35,7 +42,7 @@ pipeline {
             steps {
                 script {
                     // Установка зависимостей из файла requirements.txt
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pip install -r requirements.txt'
+                    bat 'python -m pip install -r requirements.txt'
                 }
             }
         }
@@ -57,7 +64,7 @@ pipeline {
         }
         steps {
             // Запуск тестов в режиме verbose
-            bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest --verbose tests'
+            bat 'chcp 65001 && python -m pytest --verbose tests'
         }
         }
 
@@ -67,16 +74,16 @@ pipeline {
             }
             steps {
                 // Запуск тестов в тихом режиме
-                bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest --quiet tests'
+                bat 'chcp 65001 && python -m pytest --quiet tests'
             }
         }
         stage('Run HTML Report') {
             steps {
                 script {
                     // Установка плагина pytest-html
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pip install pytest-html'
+                    bat 'chcp 65001 && python -m pip install pytest-html'
                     // Запуск тестов с генерацией HTML-отчета
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest --html=%WORKSPACE%\\PytestArtifacts\\report.html'
+                    bat 'chcp 65001 && python -m pytest --html=%WORKSPACE%\\PytestArtifacts\\report.html'
                 }
             }
         }
