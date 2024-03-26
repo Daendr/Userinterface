@@ -1,7 +1,6 @@
 pipeline {
     parameters {
         choice(name: 'REPOSITORY', choices: ['https://github.com/Daendr/Userinterface.git'], description: 'Выберите репозиторий для сборки')
-        choice(name: 'BRANCH', choices: ['main', 'master'], description: 'Выберите ветку для сборки')
     }
     agent any
 
