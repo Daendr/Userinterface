@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     // Установка зависимостей из файла requirements.txt
-                    bat 'chcp 65001 && C:\\Users\\AU\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pip install -r requirements.txt'
+                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pip install -r requirements.txt'
                 }
             }
         }
