@@ -1,6 +1,7 @@
 pipeline {
     parameters {
         choice(name: 'REPOSITORY', choices: ['https://github.com/Daendr/Userinterface.git'], description: 'Выберите репозиторий для сборки')
+        choice(name: 'BRANCH', choices: ['main', 'master'], description: 'Выберите ветку для сборки')
     }
     agent any
 
@@ -13,7 +14,7 @@ pipeline {
         // Устанавливаем кодировку для вывода Python в UTF-8
         PYTHONIOENCODING = 'UTF-8'
         // Добавляем путь к Python в переменную PATH
-        PATH = "C:\\Users\\AU\\AppData\\Local\\Programs\\Python\\Python39\\:$PATH"
+        PATH = "C:\\Users\\AU\\AppData\\Local\\Programs\\Python\\Python39\\;%PATH%"
     }
 
     options {
@@ -33,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Установка зависимостей из файла requirements.txt
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pip install -r requirements.txt'
+                    bat 'chcp 65001 && python.exe -m pip install -r requirements.txt'
                 }
             }
         }
@@ -53,7 +54,7 @@ pipeline {
             steps {
                 script {
                     // Запуск тестов
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest tests'
+                    bat 'chcp 65001 && python.exe -m pytest tests'
                 }
             }
         }
@@ -62,9 +63,9 @@ pipeline {
             steps {
                 script {
                     // Установка плагина pytest-html
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pip install pytest-html'
+                    bat 'chcp 65001 && python.exe -m pip install pytest-html'
                     // Запуск тестов с генерацией HTML-отчета
-                    bat 'chcp 65001 && C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python39\\python.exe -m pytest --html=%WORKSPACE%\\PytestArtifacts\\report.html'
+                    bat 'chcp 65001 && python.exe -m pytest --html=%WORKSPACE%\\PytestArtifacts\\report.html'
                 }
             }
         }
